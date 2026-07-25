@@ -26,8 +26,8 @@ def set_refresh_cookie(response, refresh_token):
         key = REFRESH_COOKIE,
         value = refresh_token,
         httponly=True,
-        # secure=True, # TODO: Chaange it to True in prod 
-        samesite="lax", # TODO: Do i need to change this for deployment
+        secure = settings.cookie_secure,
+        samesite=settings.cookie_samesite,        
         max_age = settings.refresh_token_expire_days * 24 * 3600,
         path = "/api/auth"
     )

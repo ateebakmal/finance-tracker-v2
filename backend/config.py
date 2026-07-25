@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     refresh_token_expire_days:int
     access_token_expire_minutes:int
 
+    cookie_secure:bool = False
+    cookie_samesite:str = "lax"
+
 # One shared instance imported everywhere: `from config import settings`
 # NOTE the () — you must *instantiate* the class, not just reference it.
 settings = Settings() #type: ignore[] #Loaded from .env files
