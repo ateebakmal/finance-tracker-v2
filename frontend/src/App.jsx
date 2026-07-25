@@ -20,7 +20,7 @@ import Setup from "./features/setup/SetupPage";
 import RequireProfile from "./features/profiles/RequireProfile";
 
 function Home() {
-  <Navigate to={"/dashboard"} replace />;
+  return <Navigate to={"/dashboard"} replace />;
 }
 function App() {
   return (

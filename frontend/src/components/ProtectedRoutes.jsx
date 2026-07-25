@@ -6,7 +6,11 @@ export default function ProtectedRoutes() {
   const { loading, user } = useAuth();
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner className="text-muted-foreground size-8" />
+      </div>
+    );
   }
 
   if (!user) {
