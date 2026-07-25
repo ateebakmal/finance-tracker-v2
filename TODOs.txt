@@ -1,0 +1,8 @@
+1:
+Inside create category, we cant add a new category with a similar name even with different parent.
+Like if there is a top level category bills. And there is another category others -> bills. We cant do this because bills already exists. 
+Question: Should we allow this or not?
+
+2: Adding recurring transactions
+
+3: Adding budgets
