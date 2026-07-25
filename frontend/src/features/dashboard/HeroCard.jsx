@@ -3,7 +3,7 @@ import { api } from "@/lib/api";
 import { queryKeys } from "@/lib/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { useProfile } from "../profiles/useProfile";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/components/ui/Spinner";
 
 function Sparkline() {
   // Decorative only (design doc: sparkline lives inside the hero). Real data later.

@@ -1,16 +1,21 @@
 import axios from "axios";
 import { tokenStore } from "./tokenStore";
 
+const baseURL = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : "/api";
 // Every data request in the app goes through this instance.
 export const api = axios.create({
-  baseURL: "/api", // relative -> uses your Vite proxy -> same-origin, no CORS
+  baseURL,
+  // baseURL: "/api", // relative -> uses your Vite proxy -> same-origin, no CORS
   withCredentials: true, // send the httpOnly refresh cookie
 });
 
 // A bare instance for refresh ONLY. If refresh went through `api`, a failing
 // refresh would hit the 401 interceptor -> call refresh again -> forever.
 const refreshClient = axios.create({
-  baseURL: "/api",
+  // baseURL: "/api",
+  baseURL,
   withCredentials: true,
 });
 
