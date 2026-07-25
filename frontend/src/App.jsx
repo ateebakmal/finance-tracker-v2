@@ -1,4 +1,10 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import LoginPage from "./features/auth/LoginPage";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import Dashboard from "./features/dashboard/Dashboard";
@@ -12,10 +18,15 @@ import AddTransaction from "./features/transactions/AddTransactionPage";
 import TransactionsPage from "./features/transactions/TransactionsPage";
 import Setup from "./features/setup/SetupPage";
 import RequireProfile from "./features/profiles/RequireProfile";
+
+function Home() {
+  <Navigate to={"/dashboard"} replace />;
+}
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />}></Route>
         <Route element={<ProtectedRoutes />}>
           <Route path="/setup" element={<Setup />} />
