@@ -57,7 +57,7 @@ export function AuthProvider({ children }) {
   function login() {
     // Full navigation, not a fetch — the browser must follow Google's
     // redirect chain and receive the Set-Cookie at the end.
-    window.location.href = "/api/auth/google/login";
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google/login`;
   }
 
   async function logout() {
