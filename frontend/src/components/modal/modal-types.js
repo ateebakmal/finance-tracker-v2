@@ -1,6 +1,7 @@
 export const MODALS = {
   DEMO: "DEMO",
   SWITCH_PROFILE: "switch_profile",
+  CREATE_PROFILE: "create_profile",
   CREATE_CATEGORY: "createCategory",
   CREATE_TAG: "createTag",
   // Coming later

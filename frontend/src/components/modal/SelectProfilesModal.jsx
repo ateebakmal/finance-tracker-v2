@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
 import { useProfile } from "@/features/profiles/useProfile";
 import { PlusIcon } from "@/components/icons";
+import { useModal } from "./ModalProvider";
+import { MODALS } from "./modal-types";
 
 function ProfileRow({ name, active, onSelect }) {
   return (
@@ -40,7 +42,7 @@ function ProfileRow({ name, active, onSelect }) {
 
 export default function SelectProfilesModal({ onClose }) {
   const { profiles, activeProfileId, setActiveProfile } = useProfile();
-
+  const { openModal } = useModal();
   function handleSelect(id) {
     setActiveProfile(id);
     onClose?.();
@@ -60,6 +62,9 @@ export default function SelectProfilesModal({ onClose }) {
       {/* You own the create-profile logic — this is just the trigger */}
       <button
         type="button"
+        onClick={() => {
+          openModal(MODALS.CREATE_PROFILE);
+        }}
         className="text-accent bg-accent-tint/50 mt-1 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-[#C7CBF2] py-4 font-sans text-[14px] font-bold transition active:scale-[0.99]"
       >
         <span className="bg-accent grid h-6 w-6 place-items-center rounded-full text-white">

@@ -5,6 +5,7 @@ import { MODALS } from "./modal-types";
 import { useModal } from "./ModalProvider";
 import SelectProfilesModal from "./SelectProfilesModal";
 import CreateTagModal from "@/features/tags/CreateTagModal";
+import CreateProfileModal from "@/features/profiles/CreateProfileModal";
 
 const MODAL_REGISTRY = {
   [MODALS.DEMO]: {
@@ -15,6 +16,10 @@ const MODAL_REGISTRY = {
   [MODALS.SWITCH_PROFILE]: {
     title: "Switch Profile",
     content: SelectProfilesModal,
+  },
+  [MODALS.CREATE_PROFILE]: {
+    title: "Create Profile",
+    content: CreateProfileModal,
   },
   [MODALS.CREATE_CATEGORY]: {
     getTitle: (p) => `New ${p?.type ?? "expense"} category`,

@@ -18,6 +18,7 @@ import AddTransaction from "./features/transactions/AddTransactionPage";
 import TransactionsPage from "./features/transactions/TransactionsPage";
 import Setup from "./features/setup/SetupPage";
 import RequireProfile from "./features/profiles/RequireProfile";
+import AnalyticsPage from "./features/analytics/AnalyticsPage";
 
 function Home() {
   return <Navigate to={"/dashboard"} replace />;
@@ -33,6 +34,7 @@ function App() {
           <Route element={<RequireProfile />}>
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/analytics" element={<AnalyticsPage />} />
               <Route path="/history" element={<TransactionsPage />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/categories" element={<Categories />} />
