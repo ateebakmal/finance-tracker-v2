@@ -1,9 +1,12 @@
+import { toast } from "sonner";
 import { useAuth } from "./AuthProvider";
 
 export default function LoginPage() {
   const { login } = useAuth();
   // TODO (you): enter the app in demo mode.
-  function onSkip() {}
+  function onSkip() {
+    toast("The demo feature will be implemented soon :)");
+  }
 
   return (
     <div className="min-h-screen bg-white">
