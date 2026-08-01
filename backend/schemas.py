@@ -1,4 +1,6 @@
-from datetime import date
+from datetime import date, datetime
+from zoneinfo import ZoneInfo
+
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, EmailStr, field_validator
@@ -100,10 +102,12 @@ class TransactionBase(BaseModel):
     notes:str | None = Field(max_length=500, default=None)
     source_template_id:int | None = Field(default= None)
 
+    # We shouldnt check this here because this check is for TransactionCreate. Its not wrong if its here because no transaction greater than today will be created anyway
     @field_validator("transaction_date")
     @classmethod
     def check_not_in_future(cls, v:date)->date:
-        if v > date.today():
+        print("We here in this check")
+        if v > datetime.now(ZoneInfo("Asia/Karachi")).date():
             raise ValueError("Date cannot be greater than today's date")
         return v
     

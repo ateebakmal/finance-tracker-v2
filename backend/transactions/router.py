@@ -2,6 +2,7 @@
 from datetime import datetime, timezone, date
 from types import new_class
 from typing import Annotated
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
@@ -19,14 +20,14 @@ router = APIRouter(tags=["transactions"])
 # TODO: Maybe add a limit to transactions.
 @router.get("",response_model=list[TransactionResponse])
 async def get_transactions(profile_id: int, db:Annotated[AsyncSession, Depends(get_db)]):
-    today = date.today()
+    today = datetime.now(ZoneInfo("Asia/Karachi")).date()
     month_start = today.replace(day=1)
 
     result = await db.execute(
         select(models.Transaction)
         .where(
             models.Transaction.profile_id == profile_id,
-            models.Transaction.transaction_date > month_start,
+            models.Transaction.transaction_date >= month_start,
             models.Transaction.transaction_date <= today
         )
         .options(
@@ -36,7 +37,7 @@ async def get_transactions(profile_id: int, db:Annotated[AsyncSession, Depends(g
         .order_by(
                 models.Transaction.transaction_date.desc(),
                 models.Transaction.created_at.desc()
-        )
+        ).limit(10)
         )
     
     transactions = result.scalars().all()
