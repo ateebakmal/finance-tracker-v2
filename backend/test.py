@@ -15,3 +15,4 @@ print(datetime.now(UTC).date())
 print(datetime.now(ZoneInfo("Asia/Karachi")).date())
 
 
+print(len('uq__categories__profile_id__type__parent_id__category_name_lower'))

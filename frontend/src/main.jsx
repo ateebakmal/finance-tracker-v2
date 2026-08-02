@@ -7,6 +7,7 @@ import ModalProvider from "./components/modal/ModalProvider";
 import ProfileProvider from "./features/profiles/useProfile";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ createRoot(document.getElementById("root")).render(
           </ModalProvider>
         </ProfileProvider>
       </AuthProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </StrictMode>,
 );

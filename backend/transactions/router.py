@@ -103,7 +103,7 @@ async def create_transaction(
 @router.get("/summary", response_model=TransactionSummaryResponse)
 async def get_summary(profile_id : int, db: Annotated[AsyncSession, Depends(get_db)]):
 
-    today = date.today()
+    today = datetime.now(ZoneInfo("Asia/Karachi")).date()
     month_start = today.replace(day=1)
 
     row = (await db.execute(

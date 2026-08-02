@@ -16,6 +16,7 @@ import { useTags } from "../tags/useTags";
 import { api, getApiErrorMessage } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Spinner } from "@/components/ui/Spinner";
 
 // Dummy — you'll swap for useCategories / useTags(activeProfileId)
 // const DUMMY_CATEGORIES = [
@@ -211,6 +212,11 @@ export default function AddTransaction() {
     });
   }
 
+  function handleTypeChange(type) {
+    setType(type);
+    setCategoryId(null);
+    setTagIds(new Set());
+  }
   return (
     <div className="animate-in fade-in slide-in-from-bottom-6 bg-card fixed inset-0 mx-auto flex max-w-md flex-col duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]">
       {/* Sticky header */}
@@ -232,7 +238,7 @@ export default function AddTransaction() {
         <div className="space-y-5 px-5 pt-4 pb-6">
           <Segmented
             value={type}
-            onChange={setType}
+            onChange={handleTypeChange}
             options={[
               { value: "expense", label: "Expense" },
               { value: "income", label: "Income" },
@@ -328,11 +334,16 @@ export default function AddTransaction() {
             >
               Category
             </FieldLabel>
-            <CategoryPicker
-              categories={categories}
-              value={categoryId}
-              onChange={setCategoryId}
-            />
+            {isLoadingCategories ? (
+              <Spinner />
+            ) : (
+              <CategoryPicker
+                key={type}
+                categories={categories}
+                value={categoryId}
+                onChange={setCategoryId}
+              />
+            )}
           </div>
 
           <div className="space-y-2.5">
@@ -342,27 +353,32 @@ export default function AddTransaction() {
             >
               Tags
             </FieldLabel>
-            <div className="flex [scrollbar-width:none] gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden">
-              {tags.map((t) => {
-                const on = tagIds.has(t.id);
-                return (
-                  <button
-                    key={t.id}
-                    type="button"
-                    onClick={() => toggleTag(t.id)}
-                    className={cn(
-                      "flex shrink-0 items-center gap-1 rounded-full border border-dashed px-3 py-1.5 font-sans text-[13px] font-bold transition",
-                      on
-                        ? "border-accent bg-accent-tint text-accent"
-                        : "bg-card text-ink border-[#C7CBF2]",
-                    )}
-                  >
-                    <span className="text-accent">#</span>
-                    {t.name}
-                  </button>
-                );
-              })}
-            </div>
+
+            {isLoadingTags ? (
+              <Spinner />
+            ) : (
+              <div className="flex [scrollbar-width:none] gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden">
+                {tags.map((t) => {
+                  const on = tagIds.has(t.id);
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => toggleTag(t.id)}
+                      className={cn(
+                        "flex shrink-0 items-center gap-1 rounded-full border border-dashed px-3 py-1.5 font-sans text-[13px] font-bold transition",
+                        on
+                          ? "border-accent bg-accent-tint text-accent"
+                          : "bg-card text-ink border-[#C7CBF2]",
+                      )}
+                    >
+                      <span className="text-accent">#</span>
+                      {t.name}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Note */}

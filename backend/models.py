@@ -95,13 +95,22 @@ class Category(Base):
     __table_args__ = (
         # UniqueConstraint("profile_id","category_name"),
         # category_name is compared lower
+        # Index(
+        #     "uq__categories__profile_id__type__category_name_lower",
+        #     "profile_id",
+        #     "type",
+        #     text("lower(category_name)"),
+        #     unique=True
+        # ),
         Index(
-            "uq__categories__profile_id__type__category_name_lower",
+            "uq__categories__profile_id__type__parent_id__category_nameLower",
             "profile_id",
             "type",
+            "parent_id",
             text("lower(category_name)"),
-            unique=True
-        ),
+            unique=True,
+            postgresql_nulls_not_distinct=True
+            ),
         Index(None, "parent_id"),
         CheckConstraint(sql_in("type",CATEGORY_TYPE_VALUES),name= "type")
     )

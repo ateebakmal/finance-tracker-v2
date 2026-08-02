@@ -50,6 +50,8 @@ export default function HeroCard() {
     queryKey: queryKeys.transactions.byProfileId.summary(activeProfileId),
     queryFn: () => fetchSummaryData(activeProfileId),
     enabled: !!activeProfileId,
+    staleTime: 5 * 60 * 1000,
+    refetchOnReconnect: true,
   });
 
   if (isPending)

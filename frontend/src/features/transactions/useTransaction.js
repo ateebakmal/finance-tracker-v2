@@ -12,5 +12,7 @@ export function useTransaction(profileId) {
     queryKey: queryKeys.transactions.byProfileId.all(profileId),
     queryFn: () => fetchTransactions(profileId),
     enabled: !!profileId,
+    staleTime: 5 * 60 * 1000,
+    refetchOnReconnect: true,
   });
 }
