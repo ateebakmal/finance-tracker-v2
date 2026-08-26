@@ -37,7 +37,7 @@ async def get_transactions(profile_id: int, db:Annotated[AsyncSession, Depends(g
         .order_by(
                 models.Transaction.transaction_date.desc(),
                 models.Transaction.created_at.desc()
-        ).limit(10)
+        )
         )
     
     transactions = result.scalars().all()
