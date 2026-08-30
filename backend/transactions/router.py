@@ -1,10 +1,11 @@
 
 from datetime import datetime, timezone, date
+import profile
 from types import new_class
 from typing import Annotated
 from zoneinfo import ZoneInfo
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
@@ -17,32 +18,54 @@ from database import get_db
 
 router = APIRouter(tags=["transactions"])
 
-# TODO: Maybe add a limit to transactions.
+# TODO: Maybe add a limit to transactions + pagination
 @router.get("",response_model=list[TransactionResponse])
-async def get_transactions(profile_id: int, db:Annotated[AsyncSession, Depends(get_db)]):
+async def get_transactions(
+    profile_id: int, 
+    db:Annotated[AsyncSession, Depends(get_db)],
+    date_from : Annotated[date | None, Query()] = None,
+    date_to : Annotated[date | None, Query()] = None, 
+    limit : Annotated[int | None, Query()] = None
+    ):
+    # Validation of date filters
+    if date_from and date_to and date_from > date_to:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "'from' must be on or before 'to'")
+
     today = datetime.now(ZoneInfo("Asia/Karachi")).date()
     month_start = today.replace(day=1)
 
-    result = await db.execute(
-        select(models.Transaction)
-        .where(
-            models.Transaction.profile_id == profile_id,
-            models.Transaction.transaction_date >= month_start,
-            models.Transaction.transaction_date <= today
-        )
-        .options(
-            selectinload(models.Transaction.category),
-            selectinload(models.Transaction.tags)
-        )
-        .order_by(
-                models.Transaction.transaction_date.desc(),
-                models.Transaction.created_at.desc()
-        )
-        )
     
-    transactions = result.scalars().all()
+    stmt = select(models.Transaction).where(
+        models.Transaction.profile_id == profile_id
+    ).options(
+        selectinload(models.Transaction.category),
+        selectinload(models.Transaction.tags),
+        )
 
-    return transactions
+    if limit:
+        stmt = stmt.limit(limit)
+    #Default range: This month, only when client doesnt specify both from and to
+    # This only runs when both are None so we default to current month.
+    # If any one is specified that means the other bound doesnt exist so only one conditional
+    if date_from is None and date_to is None:
+        date_from = month_start
+        date_to = today
+    
+
+    if date_from is not None:
+        stmt = stmt.where(models.Transaction.transaction_date >= date_from)
+
+    if date_to is not None:
+        stmt = stmt.where(models.Transaction.transaction_date <= date_to)
+
+    # Order by date
+    stmt = stmt.order_by(models.Transaction.transaction_date.desc(), models.Transaction.created_at.desc())
+
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
+
+    
 
 @router.post("",response_model=TransactionResponse, status_code=status.HTTP_201_CREATED)
 async def create_transaction(
@@ -99,7 +122,6 @@ async def create_transaction(
     await db.refresh(new_transaction, attribute_names=["tags", "category"])
     return new_transaction
     
-
 @router.get("/summary", response_model=TransactionSummaryResponse)
 async def get_summary(profile_id : int, db: Annotated[AsyncSession, Depends(get_db)]):
 
@@ -129,5 +151,31 @@ async def get_summary(profile_id : int, db: Annotated[AsyncSession, Depends(get_
         "balance": row.income - row.expense
     }
 
+@router.get("/{transaction_id}", response_model=TransactionResponse)
+async def get_transaction(profile_id: int, transaction_id : int, db: Annotated[AsyncSession, Depends(get_db)]):
+    transaction = await db.scalar(
+        select(models.Transaction)
+        .where(models.Transaction.id == transaction_id)
+        .options(
+            selectinload(models.Transaction.category), 
+            selectinload(models.Transaction.tags)
+        )
+    )
+
+    if transaction is None or transaction.profile_id != profile_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Transaction not found")
+
+    return transaction
+
+@router.delete("/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_transaction(transaction_id :int, profile_id : int, db: Annotated[AsyncSession, Depends(get_db)]):
+    # Check transaction exists and belong to the user.
+    transaction = await db.get(models.Transaction, transaction_id)
+
+    if  transaction is None or transaction.profile_id != profile_id:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Transaction not found")
+
+    await db.delete(transaction)
+    await db.commit()
 
 

@@ -68,6 +68,23 @@ class CategoryMini(BaseModel):
     category_name:str
     type:str
 
+class CategoryUpdate(BaseModel):
+    """
+    Right now we are only editing name hence only name is added here. 
+    Might add change parent or type in future.
+    We cannot allow changing category_type because then category_id for a transaction might point to category which is income but that transaction is for expense
+    """
+    model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)
+
+    category_name:str = Field(min_length=3, max_length=50)
+
+    @field_validator("category_name", mode="before")
+    @classmethod
+    def clean_name(cls, v:str)->str:
+        return " ".join(v.split())
+
+
+
 class TagMini(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     
@@ -90,7 +107,16 @@ class TagCreate(TagBase):
 
 class TagResponse(TagBase):
     id:int = Field(gt=0)
+    profile_id: int
 
+class TagUpdate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    name: str = Field(min_length=3,max_length=25)
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def clean_name(cls, v:str)->str:
+        return " ".join(v.split())
 
 class TransactionBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)

@@ -38,3 +38,24 @@ export function groupByBucket(transactions) {
     { label: "Earlier", items: g.earlier },
   ].filter((grp) => grp.items.length > 0);
 }
+
+export function groupByMonth(transactions) {
+  const map = new Map();
+  for (const t of transactions) {
+    const key = new Date(t.transaction_date + "T00:00:00").toLocaleDateString(
+      "en-GB",
+      {
+        month: "long",
+        year: "numeric",
+      },
+    );
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(t);
+  }
+  return [...map.entries()].map(([label, items]) => ({ label, items }));
+}
+
+// default window -> relative buckets; custom range -> by month
+export function groupTransactions(transactions, { relative }) {
+  return relative ? groupByBucket(transactions) : groupByMonth(transactions);
+}

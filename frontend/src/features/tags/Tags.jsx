@@ -24,7 +24,7 @@ function TagTypeSection({ title, tags, onAdd }) {
       ) : (
         <div className="flex flex-wrap gap-2.5">
           {tags.map((t) => (
-            <TagPill key={t.id} name={t.name} />
+            <TagPill key={t.id} tag={t} />
           ))}
         </div>
       )}

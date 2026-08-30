@@ -4,6 +4,8 @@ export const MODALS = {
   CREATE_PROFILE: "create_profile",
   CREATE_CATEGORY: "createCategory",
   CREATE_TAG: "createTag",
+  RENAME_TAG: "renameTag",
+  FILTER_TRANSACTIONS: "filterTransactions",
   // Coming later
   // ADD_CATEGORY: "addCategory",
   // ADD_TAG: "addTag"

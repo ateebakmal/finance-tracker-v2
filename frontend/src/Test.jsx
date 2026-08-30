@@ -1,15 +1,15 @@
-import { useModal } from "./components/modal/ModalProvider";
-import { MODALS } from "./components/modal/modal-types";
+import { useTransaction } from "./features/transactions/useTransaction";
+import { useProfile } from "./features/profiles/useProfile";
+import { useQueryClient } from "@tanstack/react-query";
 function Test() {
-  const { openModal } = useModal();
+  const { activeProfileId } = useProfile();
+  const queryClient = useQueryClient();
 
-  return (
-    <div className="space-y-5">
-      <button onClick={() => openModal(MODALS.CREATE_CATEGORY)}>
-        Add Category
-      </button>
-    </div>
-  );
+  const data = queryClient.getQueriesData({
+    queryKey: ["transactions", activeProfileId, "all"],
+  });
+  console.log(data);
+  return <div className="space-y-5">Test</div>;
 }
 
 export default Test;

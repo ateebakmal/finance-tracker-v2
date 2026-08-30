@@ -99,8 +99,6 @@ async function addTransaction(profileId, payload) {
 }
 
 export default function AddTransaction() {
-  // TODO: Take care of showing error and success messages.
-  // TODO: Take care of showing loading states for categories and tags
   const navigate = useNavigate();
   const { openModal } = useModal();
   const { activeProfileId } = useProfile();

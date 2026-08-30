@@ -208,3 +208,48 @@ export function SearchIcon({ className }) {
     </svg>
   );
 }
+
+export function MoreIcon({ className }) {
+  return (
+    <svg className={className} {...base} fill="currentColor" stroke="none">
+      <circle cx="12" cy="5" r="1.6" />
+      <circle cx="12" cy="12" r="1.6" />
+      <circle cx="12" cy="19" r="1.6" />
+    </svg>
+  );
+}
+
+export function CloseIcon({ className }) {
+  return (
+    <svg className={className} {...base}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
+export function FilterIcon({ className }) {
+  return (
+    <svg className={className} {...base}>
+      <path d="M4 6h16M7 12h10M10 18h4" />
+    </svg>
+  );
+}
+export function PencilIcon({ className }) {
+  return (
+    <svg className={className} {...base}>
+      <path d="M4 20h4l10-10a2 2 0 0 0-3-3L5 17z" />
+      <path d="M13.5 6.5 17.5 10.5" />
+    </svg>
+  );
+}
+
+export function TrashIcon({ className }) {
+  return (
+    <svg className={className} {...base}>
+      <path d="M4 7h16" />
+      <path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+      <path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" />
+      <path d="M10 11v6M14 11v6" />
+    </svg>
+  );
+}

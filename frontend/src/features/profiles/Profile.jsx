@@ -2,14 +2,7 @@ import { useAuth } from "@/features/auth/AuthProvider";
 import { useProfile } from "@/features/profiles/useProfile";
 import Card from "@/components/Card";
 import ProfileRow from "@/features/profiles/ProfileRow";
-import {
-  TagIcon,
-  ListIcon,
-  BellIcon,
-  DownloadIcon,
-  WalletIcon,
-  TargetIcon,
-} from "@/components/icons";
+import { TagIcon, ListIcon, TargetIcon, RepeatIcon } from "@/components/icons";
 import SettingsRow from "./SettingsRow";
 import SettingsList from "./SettingsList";
 import { useNavigate } from "react-router-dom";
@@ -96,6 +89,18 @@ export default function Profile() {
             }}
           />
           <SettingsRow icon={TargetIcon} label="Budgets" onClick={() => {}} />
+          <SettingsRow
+            icon={RepeatIcon}
+            label="Recurring Transactions"
+            onClick={() => {}}
+          />
+          <SettingsRow
+            icon={RepeatIcon}
+            label="Test page"
+            onClick={() => {
+              navigate("/test");
+            }}
+          />
           {/* <SettingsRow
             icon={BellIcon}
             label="Notifications"

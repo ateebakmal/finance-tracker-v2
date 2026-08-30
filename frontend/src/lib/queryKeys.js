@@ -1,8 +1,16 @@
 export const queryKeys = {
   transactions: {
     byProfileId: {
-      all: (profileId) => ["transactions", "all", profileId],
-      summary: (profileId) => ["transactions", "summary", profileId],
+      byProfile: (profileId) => ["transactions", profileId], //Invalidation prefix
+      // prettier-ignore
+      all: (profileId, filters = null) => ["transactions", profileId,"all",filters,],
+      summary: (profileId) => ["transactions", profileId, "summary"],
+      detail: (profileId, transactionId) => [
+        "transactions",
+        profileId,
+        "detail",
+        transactionId,
+      ],
     },
   },
   categories: {

@@ -78,6 +78,7 @@ export default function HeroCard() {
             </p>
             <Money
               value={data.balance}
+              sign={data.balance < data.income ? "-" : null}
               className="mt-2 block text-[42px] leading-none font-semibold tracking-[-0.8px] text-white"
             />
           </div>

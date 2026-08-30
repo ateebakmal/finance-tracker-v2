@@ -48,7 +48,7 @@ export default function CreateCategoryModal({ type = "expense", onClose }) {
     const payload = { category_name: name, parent_id: parentId, type };
     toast.promise(mutateAsync(payload), {
       loading: "Adding new category",
-      onSuccess: "Category added",
+      onSuccess: () => "Category added",
       error: (e) => getApiErrorMessage(e) ?? "Some error happened",
     });
   }

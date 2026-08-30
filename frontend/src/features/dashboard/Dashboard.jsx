@@ -5,11 +5,13 @@ import HeroCard from "./HeroCard";
 import QuickActions from "./QuickActions";
 import TransactionList from "./TransactionList";
 import { useProfile } from "../profiles/useProfile";
-import { useTransaction } from "../transactions/useTransaction";
+import { useTransaction } from "../transactions/useTransactions";
 function Dashboard() {
   const { user, accessToken } = useAuth();
   const { profiles, activeProfile, activeProfileId } = useProfile();
-  const { data: transactions, isLoading } = useTransaction(activeProfileId);
+  const { data: transactions, isLoading } = useTransaction(activeProfileId, {
+    limit: 10,
+  });
   console.log(profiles);
   console.log(activeProfile);
   console.log(activeProfileId);

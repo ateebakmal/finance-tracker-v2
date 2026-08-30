@@ -1,7 +1,5 @@
 Current issues:
 
-- Inside create category, we cant add a new category with a similar name even with different parent.Like if there is a top level category bills. And there is another category others -> bills. We cant do this because bills already exists. Question: Should we allow this or not?
-
 - Adding recurring transactions
 
 - Adding budgets
@@ -111,3 +109,20 @@ All categories for a profile name has to be distinct even if they had different 
 #### Now:
 
 Categories with different parent can use duplicate names as long as they are not on same heirarichal level
+
+## 4: Moved modal from bottom to middle
+
+Used shadcn Dialog instead of Sheet
+
+## 5: Limits and date filters on transactions page
+
+Added a date filter to filter transactions based on a date.
+Also added filters that allows you to filter transactions based on categories and tags.
+
+## 6: Added a transaction Detail page.
+
+Added both backend and frontend routes + complete frontend page
+
+## 7: Delete Transaction
+
+## 8: Delete Category

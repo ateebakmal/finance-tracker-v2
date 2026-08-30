@@ -15,6 +15,8 @@ export default function Money({ value, sign, masked: isMasked, className }) {
   } else if (sign === "expense") {
     text = signed(value, false);
     color = "text-neg";
+  } else if (sign == "-") {
+    text = `${sign}${text}`;
   }
 
   return (

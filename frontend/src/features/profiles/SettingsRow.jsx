@@ -6,7 +6,7 @@ export default function SettingsRow({ icon: Icon, label, value, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="active:bg-bg flex w-full items-center gap-3 py-3.5 text-left transition"
+      className="active:bg-bg flex w-full items-center gap-3 px-4 py-3.5 text-left transition"
     >
       <IconChip tone="neutral">
         <Icon className="h-5 w-5" />

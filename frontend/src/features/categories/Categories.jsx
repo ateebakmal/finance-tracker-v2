@@ -9,6 +9,7 @@ import CategoryTree from "./CategoryTree";
 import Card from "@/components/Card";
 import Button from "@/components/Button";
 import { ChevronLeftIcon, PlusIcon } from "@/components/icons";
+import CategoryDropDownMenu from "./CategoryDropDownMenu";
 
 function TypeSection({ title, categories, selectedId, onSelect, onAdd }) {
   return (
@@ -29,6 +30,7 @@ function TypeSection({ title, categories, selectedId, onSelect, onAdd }) {
             categories={categories}
             selectedId={selectedId}
             onSelect={onSelect}
+            renderActions={(node) => <CategoryDropDownMenu node={node} />}
           />
         )}
       </Card>

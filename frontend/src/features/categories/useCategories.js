@@ -12,5 +12,6 @@ export function useCategories(profileId) {
     queryKey: queryKeys.categories.byProfileId.all(profileId),
     queryFn: () => getCategories(profileId),
     enabled: !!profileId,
+    staleTime: 5 * 60_000, // 5 mins stale time by default
   });
 }

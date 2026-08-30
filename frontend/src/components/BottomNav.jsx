@@ -47,7 +47,7 @@ export default function BottomNav() {
           </button>
         </div>
 
-        <NavItem to="/history" icon={WalletIcon} label="Wallet" />
+        <NavItem to="/transactions" icon={WalletIcon} label="Wallet" />
         <NavItem to="/profile" icon={UserIcon} label="Profile" />
       </div>
     </nav>

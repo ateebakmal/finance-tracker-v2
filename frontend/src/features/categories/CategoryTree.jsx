@@ -22,11 +22,14 @@ function CategoryNode({
   onSelect,
   expanded,
   toggle,
+  renderActions,
 }) {
   const children = childrenMap.get(node.id) ?? [];
   const hasChildren = children.length > 0;
   const isOpen = expanded.has(node.id);
   const isSelected = selectedId === node.id;
+
+  console.log(node);
 
   return (
     <div>
@@ -62,6 +65,7 @@ function CategoryNode({
         >
           {node.category_name}
         </button>
+        {renderActions?.(node)}
       </div>
 
       {isOpen &&
@@ -75,6 +79,7 @@ function CategoryNode({
             onSelect={onSelect}
             expanded={expanded}
             toggle={toggle}
+            renderActions={renderActions}
           />
         ))}
     </div>
@@ -85,6 +90,7 @@ export default function CategoryTree({
   categories,
   selectedId = null,
   onSelect,
+  renderActions,
 }) {
   const childrenMap = useChildrenMap(categories);
   const roots = childrenMap.get("root") ?? [];
@@ -110,6 +116,7 @@ export default function CategoryTree({
           onSelect={onSelect}
           expanded={expanded}
           toggle={toggle}
+          renderActions={renderActions}
         />
       ))}
     </div>

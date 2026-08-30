@@ -6,6 +6,8 @@ import { useModal } from "./ModalProvider";
 import SelectProfilesModal from "./SelectProfilesModal";
 import CreateTagModal from "@/features/tags/CreateTagModal";
 import CreateProfileModal from "@/features/profiles/CreateProfileModal";
+import FilterTransactionsModal from "@/features/transactions/FilterTransactionsModal";
+import RenameTagModal from "@/features/tags/RenameTagModal";
 
 const MODAL_REGISTRY = {
   [MODALS.DEMO]: {
@@ -28,6 +30,14 @@ const MODAL_REGISTRY = {
   [MODALS.CREATE_TAG]: {
     getTitle: (p) => `New ${p?.type ?? "expense"} tag`,
     content: CreateTagModal,
+  },
+  [MODALS.FILTER_TRANSACTIONS]: {
+    title: "Filter Transactions",
+    content: FilterTransactionsModal,
+  },
+  [MODALS.RENAME_TAG]: {
+    title: "Rename Tag",
+    content: RenameTagModal,
   },
 };
 
