@@ -141,6 +141,29 @@ class TransactionCreate(TransactionBase):
     category_id:int
     tag_ids:list[int] | None = Field(default=None)
 
+class TransactionUpdate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    description: str | None = None
+    amount: int | None = Field(default=None, gt=0)
+    transaction_type: Literal["income", "expense"] | None = None
+    transaction_date: date | None = None
+    notes: str | None = Field(default=None, max_length=500)
+    source_template_id: int | None = None
+    category_id: int | None = None
+    tag_ids: list[int] | None = None
+
+    # We shouldnt check this here because this check is for TransactionCreate. Its not wrong if its here because no transaction greater than today will be created anyway
+    @field_validator("transaction_date")
+    @classmethod
+    def check_not_in_future(cls, v:date | None )->date | None:
+        if v is None:
+            return None
+        
+        if v > datetime.now(ZoneInfo("Asia/Karachi")).date():
+            raise ValueError("Date cannot be greater than today's date")
+        return v
+
+
 class TransactionResponse(TransactionBase):
     id:int
     profile_id:int

@@ -11,7 +11,7 @@ from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas import TransactionCreate, TransactionResponse, TransactionSummaryResponse
+from schemas import TransactionCreate, TransactionResponse, TransactionSummaryResponse, TransactionUpdate
 import models
 from database import get_db
 
@@ -19,6 +19,7 @@ from database import get_db
 router = APIRouter(tags=["transactions"])
 
 # TODO: Maybe add a limit to transactions + pagination
+#TODO: We reuse checking category and tags in post and patch. Might refactor later
 @router.get("",response_model=list[TransactionResponse])
 async def get_transactions(
     profile_id: int, 
@@ -166,6 +167,65 @@ async def get_transaction(profile_id: int, transaction_id : int, db: Annotated[A
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Transaction not found")
 
     return transaction
+
+@router.patch("/{transaction_id}", response_model=TransactionResponse, status_code=status.HTTP_200_OK)
+async def update_transaction(transaction_id : int, profile_id : int,transaction_update: TransactionUpdate, db:Annotated[AsyncSession, Depends(get_db)]):
+    # Check transaction exists and belong to the user.
+    print(transaction_update)
+    transaction = await db.get(
+    models.Transaction,
+    transaction_id,
+    options=[
+        selectinload(models.Transaction.tags),      # so `transaction.tags = ...` won't lazy-load
+        selectinload(models.Transaction.category),  # (also nice for the response)
+    ],
+)
+
+    if  transaction is None or transaction.profile_id != profile_id:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Transaction not found")
+
+    update_data = transaction_update.model_dump(exclude_unset=True)
+
+    # type after this patch (may be changing)
+    new_type = update_data.get("transaction_type", transaction.transaction_type)
+    
+    # Need to check tags and categories belong to this user
+    if "category_id" in update_data:
+        category = await db.get(models.Category, update_data["category_id"])
+        if category is None or category.profile_id != profile_id or category.type != new_type:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid Category for this profile")
+
+    
+    if "tag_ids" in update_data:
+        # 2. Check all tags belong to this user
+        tag_ids = update_data.pop("tag_ids")
+        tags =  (
+                await (db.scalars(
+                                select(models.Tag)
+                                .where(
+                                    models.Tag.id.in_(tag_ids),
+                                    models.Tag.profile_id == profile_id,
+                                    models.Tag.type == new_type
+                                )
+                                ))
+                ).all()
+
+        
+        valid_tag_ids = {tag.id for tag in tags}
+
+        if valid_tag_ids != set(tag_ids):
+            raise HTTPException(status.HTTP_400_BAD_REQUEST,"Invalid tag_ids for this profile")
+
+        transaction.tags = list(tags)
+
+    for field, value in update_data.items():
+        setattr(transaction, field,value)
+
+    await db.commit()
+    await db.refresh(transaction, attribute_names=["category", "tags"])
+
+    return transaction
+    
 
 @router.delete("/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_transaction(transaction_id :int, profile_id : int, db: Annotated[AsyncSession, Depends(get_db)]):

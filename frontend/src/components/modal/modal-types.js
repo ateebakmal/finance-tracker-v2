@@ -6,6 +6,7 @@ export const MODALS = {
   CREATE_TAG: "createTag",
   RENAME_TAG: "renameTag",
   FILTER_TRANSACTIONS: "filterTransactions",
+  CONFIRM_EDIT_TRANSACTION: "confirmEditTransaction",
   // Coming later
   // ADD_CATEGORY: "addCategory",
   // ADD_TAG: "addTag"

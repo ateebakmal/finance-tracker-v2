@@ -20,6 +20,8 @@ import Setup from "./features/setup/SetupPage";
 import RequireProfile from "./features/profiles/RequireProfile";
 import AnalyticsPage from "./features/analytics/AnalyticsPage";
 import TransactionDetailPage from "./features/transactions/TransactionDetailPage";
+import AddTransactionPage from "./features/transactions/addAndEditTransaction/AddTransactionPage";
+import EditTransactionPage from "./features/transactions/addAndEditTransaction/EditTransactionPage";
 
 function Home() {
   return <Navigate to={"/dashboard"} replace />;
@@ -45,7 +47,11 @@ function App() {
               <Route path="/profile/categories" element={<Categories />} />
               <Route path="/profile/tags" element={<Tags />} />
             </Route>
-            <Route path="/add-transaction" element={<AddTransaction />} />
+            <Route path="/add-transaction" element={<AddTransactionPage />} />
+            <Route
+              path="/transactions/:id/edit"
+              element={<EditTransactionPage />}
+            />
           </Route>
         </Route>
         <Route path="/test" element={<Test />} />

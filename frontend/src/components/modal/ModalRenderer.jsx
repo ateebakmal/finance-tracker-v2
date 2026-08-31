@@ -8,6 +8,7 @@ import CreateTagModal from "@/features/tags/CreateTagModal";
 import CreateProfileModal from "@/features/profiles/CreateProfileModal";
 import FilterTransactionsModal from "@/features/transactions/FilterTransactionsModal";
 import RenameTagModal from "@/features/tags/RenameTagModal";
+import ConfirmEditTransactionModal from "@/features/transactions/addAndEditTransaction/ConfirmEditTransactionModal";
 
 const MODAL_REGISTRY = {
   [MODALS.DEMO]: {
@@ -38,6 +39,10 @@ const MODAL_REGISTRY = {
   [MODALS.RENAME_TAG]: {
     title: "Rename Tag",
     content: RenameTagModal,
+  },
+  [MODALS.CONFIRM_EDIT_TRANSACTION]: {
+    title: "Confirm these changes?",
+    content: ConfirmEditTransactionModal,
   },
 };
 

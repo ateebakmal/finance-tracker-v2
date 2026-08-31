@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useMemo, useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { HomeIcon, ChevronRightIcon } from "@/components/icons";
 
@@ -18,6 +18,18 @@ export default function CategoryPicker({ categories, value, onChange }) {
   }, [categories]);
 
   const [viewParentId, setViewParentId] = useState(null); // null = root
+
+  // On first load with a preselected category, jump the view to that category's
+  // parent level so the selected chip is visible and highlighted right away.
+  const didInit = useRef(false);
+  useEffect(() => {
+    if (didInit.current) return;
+    if (value == null || byId.size === 0) return; // wait for categories to load
+    const node = byId.get(value);
+    if (!node) return;
+    setViewParentId(node.parent_id ?? null);
+    didInit.current = true; // run ONCE — never fight the user's navigation after
+  }, [value, byId]);
 
   const chips = childrenMap.get(viewParentId ?? "root") ?? [];
 
